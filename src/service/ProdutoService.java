@@ -1,46 +1,82 @@
-package service;
+package app;
 
-import model.Produto;
-import repository.ProdutoRepository;
+import service.ProdutoService;
+import java.util.Scanner;
 
-public class ProdutoService {
+public class Main {
 
-    private ProdutoRepository repository = new ProdutoRepository();
+    public static void main(String[] args) {
 
-    // Cadastrar produto
-    public void cadastrarProduto(String nome, double preco, int quantidade) {
+        Scanner scanner = new Scanner(System.in);
+        ProdutoService service = new ProdutoService();
 
-        if (nome == null || nome.isEmpty()) {
-            System.out.println("Erro: nome não pode ser vazio!");
-            return;
-        }
+        int opcao;
 
-        if (preco < 0) {
-            System.out.println("Erro: preço não pode ser negativo!");
-            return;
-        }
+        do {
+            System.out.println("\n===== SISTEMA DE PRODUTOS =====");
+            System.out.println("1 - Cadastrar produto");
+            System.out.println("2 - Listar produtos");
+            System.out.println("3 - Buscar produto");
+            System.out.println("4 - Atualizar produto");
+            System.out.println("5 - Remover produto");
+            System.out.println("0 - Sair");
+            System.out.print("Escolha: ");
 
-        if (quantidade < 0) {
-            System.out.println("Erro: quantidade não pode ser negativa!");
-            return;
-        }
+            opcao = scanner.nextInt();
+            scanner.nextLine();
 
-        Produto produto = new Produto(nome, preco, quantidade);
-        repository.salvar(produto);
+            switch (opcao) {
 
-        System.out.println("Produto cadastrado com sucesso!");
-    }
+                case 1:
+                    System.out.print("Nome: ");
+                    String nome = scanner.nextLine();
 
-    // Listar produtos
-    public void listarProdutos() {
+                    System.out.print("Preço: ");
+                    double preco = scanner.nextDouble();
 
-        if (repository.listar().isEmpty()) {
-            System.out.println("Nenhum produto cadastrado.");
-            return;
-        }
+                    System.out.print("Quantidade: ");
+                    int quantidade = scanner.nextInt();
 
-        for (Produto p : repository.listar()) {
-            p.exibir();
-        }
+                    service.cadastrarProduto(nome, preco, quantidade);
+                    break;
+
+                case 2:
+                    service.listarProdutos();
+                    break;
+
+                case 3:
+                    System.out.print("Nome do produto: ");
+                    service.buscarProduto(scanner.nextLine());
+                    break;
+
+                case 4:
+                    System.out.print("Nome do produto: ");
+                    String nomeAtualizar = scanner.nextLine();
+
+                    System.out.print("Novo preço: ");
+                    double novoPreco = scanner.nextDouble();
+
+                    System.out.print("Nova quantidade: ");
+                    int novaQtd = scanner.nextInt();
+
+                    service.atualizarProduto(nomeAtualizar, novoPreco, novaQtd);
+                    break;
+
+                case 5:
+                    System.out.print("Nome do produto: ");
+                    service.removerProduto(scanner.nextLine());
+                    break;
+
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+
+                default:
+                    System.out.println("Opção inválida!");
+            }
+
+        } while (opcao != 0);
+
+        scanner.close();
     }
 }

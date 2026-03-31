@@ -15,4 +15,22 @@ public class ProdutoRepository {
     public List<Produto> listar() {
         return produtos;
     }
+
+    public Produto buscarPorNome(String nome) {
+        for (Produto p : produtos) {
+            if (p.getNome().equalsIgnoreCase(nome)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public boolean remover(String nome) {
+        Produto produto = buscarPorNome(nome);
+        if (produto != null) {
+            produtos.remove(produto);
+            return true;
+        }
+        return false;
+    }
 }
